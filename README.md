@@ -9,7 +9,9 @@ I am using this approach on production, one of the advantages is that i have ful
 Moreover i can easily register an event which gets triggered after my ad was rendered.
 
 Important is that you are disabling initial loading of the ads:
-```googletag.pubads().disableInitialLoad();```
+```
+googletag.pubads().disableInitialLoad();
+```
  
 If you use asynchronous execution which i highly recommend, make sure that you are pushing your code into googletag.cmd:
 ```
