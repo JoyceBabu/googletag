@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Google Publisher Tag</title>
+    <script type="text/javascript">
+        var googletag = googletag || {};
+        var adSlots = {};
+        googletag.cmd = googletag.cmd || [];
+
+        // load asynchronously the GPT JavaScript library used by DFP,
+        // using SSL/HTTPS if necessary
+        (function() {
+            var gads   = document.createElement('script');
+            gads.async = true;
+            gads.type  = 'text/javascript';
+
+            var useSSL = 'https:' === document.location.protocol;
+            gads.src = (useSSL ? 'https:' : 'http:') + '//www.googletagservices.com/tag/js/gpt.js';
+            var node =document.getElementsByTagName('script')[0];
+            node.parentNode.insertBefore(gads, node);
+        })();
+    </script>
+
+    <script type="text/javascript">
+        // can be moved as well in the body
+        // if using async mode, wrap all the javascript into googletag.cmd.push!
+        googletag.cmd.push(function() {
+            // set page-level attributes for ad slots that serve AdSense
+            googletag.pubads().set("adsense_background_color", "FFFFFF");
+
+            // define slots
+            adSlots["banner1"] = googletag.defineSlot(
+                    "/1234/travel/asia/food",
+                    [728, 90],
+                    "banner1"
+                )
+                .addService(googletag.pubads())
+                .setTargeting(
+                    "interests",
+                    ["sports", "music", "movies"]
+                );
+            adSlots["banner2"] = googletag.defineSlot(
+                    "/1234/travel/asia/food",
+                    [[468, 60], [728, 90], [300, 250]],
+                    "banner2"
+                )
+                .addService(googletag.pubads())
+                .setTargeting("gender", "male")
+                .setTargeting("age", "20-30");
+            // Set slot-level key-value targeting
+            googletag.pubads().setTargeting("topic","basketball");
+
+            // enables Single Request Architecture (SRA)
+            googletag.pubads().enableSingleRequest();
+
+            // Disable initial load, we will use refresh() to fetch ads.
+            // Calling this function means that display() calls just
+            // register the slot as ready, but do not fetch ads for it.
+            googletag.pubads().disableInitialLoad();
+
+            // Collapses empty div elements on a page when there is no ad content to display.
+            googletag.pubads().collapseEmptyDivs();
+
+            // Enables all GPT services that have been defined for ad slots on the page.
+            googletag.enableServices();
+        });
+    </script>
+</head>
+<body>
+
+    <div id="banner1" style="width:300px; height:250px;"></div>
+
+    <div id="banner2" style="width:300px; height:250px;"></div>
+
+    <script type="text/javascript">
+        // this code can be moved externally to improve performance
+        googletag.cmd.push(function() {
+            // prerender the banner1 but don't display it because of disableInitialLoad()
+            googletag.display("banner1");
+            // display banner1
+            googletag.pubads().refresh([adSlots["banner1"]]);
+            // add event to know if the banner1 is empty or not
+            googletag.pubads().addEventListener('slotRenderEnded', function(event) {
+                if (event.slot === adSlots["banner1"]) {
+                    if (!event.isEmpty){
+                        // banner1 is rendered and not empty
+                    }else{
+                        // banner1 is rendered and empty
+                    }
+                }
+            });
+        });
+
+        googletag.cmd.push(function() {
+            // prerender the banner2 but don't display it because of disableInitialLoad()
+            googletag.display("banner2");
+            // display banner2
+            googletag.pubads().refresh([adSlots["banner2"]]);
+            // add event to know if the banner2 is empty or not
+            googletag.pubads().addEventListener('slotRenderEnded', function(event) {
+                if (event.slot === adSlots["banner2"]) {
+                    if (!event.isEmpty){
+                        // banner2 is rendered and not empty
+                    }else{
+                        // banner2 is rendered and empty
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>
